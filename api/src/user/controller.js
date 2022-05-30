@@ -1,5 +1,6 @@
 const { sequelize, Sequelize } = require("../configs/sequelize");
 const UserProfile = require("../user-profile/model");
+const httpStatus = require('http-status');
 const { Op } = Sequelize;
 const User = require('./model');
 
@@ -7,71 +8,113 @@ let methods = {};
 
 methods = {
     create: async (req,res) => {
-        let user = await User.create({
-            username: req.body.username,
-            email: req.body.email,
-            password: req.body.password
-        })
-        .catch((error) => {
-            console.log("Erro: "+ error);
-        });
+        if('username' in req.body && req.body.username != ""){
+            let user = await User.findOne({where: {username: req.body.username}})
 
-        res.send(user);
+            if(user != null){
+                return res.status(httpStatus.CONFLICT).end("Username already exists") 
+            }
+
+        }else{
+            return res.status(httpStatus.BAD_REQUEST).end("Username missing from request");
+        }
+
+        if('email' in req.body && req.body.email == ""){
+            let regexp = new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/);
+
+            if(!regexp.test(req.body.email)){
+                return res.status(httpStatus.BAD_REQUEST).end("Invalid email.")
+            } 
+        }else{
+            return res.status(httpStatus.BAD_REQUEST).end("Email missing from request");
+        }
+        
+        if('password' in req.body && req.body.password == ""){
+            if(req.body.password.length < 8){
+                return res.status(httpStatus.BAD_REQUEST).end("Password is too short");
+            }
+        }else{
+            return res.status(httpStatus.BAD_REQUEST).end("Password missing from request")
+        }
+
+        try{
+            let user = await User.create({
+                username: req.body.username,
+                email: req.body.email,
+                password: req.body.password
+            })
+
+            res.send(user);
+        }
+        catch(error){
+            console.log(error);
+            res.status(httpStatus.INTERNAL_SERVER_ERROR).end("Internal server error");
+        }
     },
     findAll: async (req,res) => {
-        let users = await User.findAll()
-        .catch((error) => {
-            console.log("Erro: "+ error);
-        });
-
-        res.json(users);
+        try{
+            let users = await User.findAll()
+            res.json(users);
+        }
+        catch(error){
+            console.log(error);
+            res.status(httpStatus.INTERNAL_SERVER_ERROR).end("Internal server error");
+        }
     },
     findById: async (req,res) => {
-        let user = await User.findByPk(req.query.id)
-        .catch((error) => {
-            console.log("Erro: "+ error);
-        });
-
-        res.json(user);
-    },
-    findByUsername: async (req,res) => {
-        let user = await User.findOne ({ where: {username: req.query.username}})
-        .catch((error) => {
-            console.log("Erro: "+ error);
-        });
-
-        res.json(user);
+        try{
+            let user = await User.findByPk(req.params.id)
+            res.json(user);
+        }
+        catch(error){
+            console.log(error);
+            res.status(httpStatus.INTERNAL_SERVER_ERROR).end("Internal server error");
+        }
     },
     update: async (req,res) => {
-        let user = await User.findByPk(req.body.id)
-        .catch((error) => {
-            console.log("Erro: " + error);
-        })
+        try{
+            let user = await User.findByPk(req.body.id);
 
-        if('password' in req.body){
-            user.password = req.body.password;
+            if('password' in req.body){
+                user.password = req.body.password;
+            }
+            if('email' in req.body){
+                user.email = req.body.email;
+            }
+    
+            let nAffected = await user.save();
+
+            res.json({msg:"OK", nAffected: nAffected});
         }
-        if('email' in req.body){
-            user.email = req.body.email;
+
+        catch(error){
+            console.log(error);
+            res.status(httpStatus.INTERNAL_SERVER_ERROR).end("Internal server error");
         }
-
-        let nAffected = await user.save()
-        .catch((error) => {
-            console.log("Erro: " + error);
-        })
-
-        res.json({msg:"OK", nAffected: nAffected});
     },
     delete: async (req,res) => {
-        let nAffected = await User.destroy({
-            where: {
-                id: req.body.id
+        if('id' in req.body){
+            let regexp = new RegExp(/^\d+$/);
+            if(!regexp.test(req.body.id)){
+                res.status(httpStatus.BAD_REQUEST).end("Id can't contain non-numeric characters")
             }
-        }).catch((error) => {
-            console.log("Erro: " + error)
-        });
+        }   else {
+            res.status(httpStatus.BAD_REQUEST).end("Id missing from request");
+        }
 
-        res.json({msg:"OK", nAffected: nAffected});
+        try{
+            let nAffected = await User.destroy({
+                where: {
+                    id: req.body.id
+                }
+            })
+
+            res.json({msg:"OK", nAffected: nAffected});
+        }
+        catch(error){
+            console.log(error);
+            res.status(httpStatus.INTERNAL_SERVER_ERROR).end("Internal server error");
+        }
     }
 }
 

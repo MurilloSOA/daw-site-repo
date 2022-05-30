@@ -22,7 +22,7 @@ UserProfile.init({
     }
 },{
     sequelize,
-    modelName: userProfiles 
+    modelName: 'userProfiles'
 })
 
 User.belongsToMany(Profile, {through: UserProfile});

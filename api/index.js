@@ -14,6 +14,8 @@ db.sequelize.sync({alter:true}).then(() => {
     console.log("Erro: "+error)
 })
 
+require('./src/routes.js')(app);
+
 app.listen(PORT, function(){
     console.log("Server is running on port "+PORT+". Press Ctrl+C to stop...");
 });
