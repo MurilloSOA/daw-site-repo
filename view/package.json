@@ -1,0 +1,11 @@
+{
+  "name": "daw-site-view",
+  "version": "1.0.0",
+  "description": "View do site projeto de DAW II",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
