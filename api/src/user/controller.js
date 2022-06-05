@@ -132,7 +132,7 @@ methods = {
                 }
                 
                 let modifiedUser = await user.save();
-                res.send(modifiedUser)
+                res.send(modifiedUser);
             }
         }
         catch(error){
@@ -156,13 +156,13 @@ methods = {
                 }
             })
             if(deletedUser == 0){
-                res.set("Info","Nothing was found to be deleted")
-                res.status(httpStatus.NO_CONTENT).end()
+                res.set("Info","Nothing was found to be deleted");
+                res.status(httpStatus.NO_CONTENT).end();
             }   else {
-                res.status(httpStatus.OK).send("The user with the requested Id was deleted")
+                res.status(httpStatus.OK).send("The user with the requested Id was deleted");
             }
 
-            res.json("User deleted successfully")
+            res.json("User deleted successfully");
         }
         catch(error){
             console.log(error);
