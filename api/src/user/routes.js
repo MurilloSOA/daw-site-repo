@@ -16,4 +16,7 @@ module.exports = (app) => {
     app.delete('/users',(req,res) => {
         controller.delete(req,res)
     });
+    app.post('/login', (req,res) => {
+        controller.login(req,res)
+    });
 }

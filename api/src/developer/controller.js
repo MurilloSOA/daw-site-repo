@@ -1,6 +1,7 @@
 const httpStatus = require("http-status");
 const { sequelize, Sequelize } = require("../configs/sequelize");
 const { Op } = Sequelize;
+const auth = require('../core/auth')
 const Developer = require('./model');
 
 let methods = {};
@@ -18,6 +19,8 @@ methods = {
             return res.status(httpStatus.BAD_REQUEST).end("Description missing from request");
         }
         try{
+            await auth.verifyUserProfile(req.headers['x-access-token'],["Administrator","Moderator"])
+
             let developer = await Developer.create({
                 name: req.body.name
             })
@@ -39,8 +42,12 @@ methods = {
             return res.json(developers);
         }
         catch(error){
-            console.log(error);
-            return res.status(httpStatus.INTERNAL_SERVER_ERROR).end("Internal server error");
+            if(error.status == httpStatus.UNAUTHORIZED || error.status == httpStatus.FORBIDDEN){
+                return res.status(error.status).end(error.message)
+            }   else{
+                console.log(error);
+                return res.status(httpStatus.INTERNAL_SERVER_ERROR).end("Internal server error");
+            }
         }
     },
     findById: async (req,res) => {
@@ -58,8 +65,12 @@ methods = {
             }
         }
         catch(error){
-            console.log(error);
-            return res.status(httpStatus.INTERNAL_SERVER_ERROR).end("Internal server error");
+            if(error.status == httpStatus.UNAUTHORIZED || error.status == httpStatus.FORBIDDEN){
+                return res.status(error.status).end(error.message)
+            }   else{
+                console.log(error);
+                return res.status(httpStatus.INTERNAL_SERVER_ERROR).end("Internal server error");
+            }
         }
     },
     update: async (req,res) => {
@@ -77,6 +88,8 @@ methods = {
         }
 
         try{
+            await auth.verifyUserProfile(req.headers['x-access-token'],["Administrator","Moderator"])
+
             let developer = await Developer.findByPk(req.body.id);
 
             if(developer == null){
@@ -91,8 +104,12 @@ methods = {
             }
         }
         catch(error){
-            console.log(error);
-            return res.status(httpStatus.INTERNAL_SERVER_ERROR).end("Internal server error");
+            if(error.status == httpStatus.UNAUTHORIZED || error.status == httpStatus.FORBIDDEN){
+                return res.status(error.status).end(error.message)
+            }   else{
+                console.log(error);
+                return res.status(httpStatus.INTERNAL_SERVER_ERROR).end("Internal server error");
+            }
         }
     },
     delete: async (req,res) => {
@@ -106,6 +123,8 @@ methods = {
         }
 
         try{
+            await auth.verifyUserProfile(req.headers['x-access-token'],["Administrator","Moderator"])
+
             let deletedDeveloper = await Developer.destroy({
                 where: {
                     id: req.body.id
@@ -114,7 +133,7 @@ methods = {
             if(deletedDeveloper == 0){
                 return res.status(httpStatus.NOT_FOUND).end("Developer with the requested ID was not found");
             }   else {
-                return res.status(httpStatus.OK).send("Developer with the requested ID was deleted");
+                return res.status(httpStatus.OK).end("Developer with the requested ID was deleted");
             }
         }
         catch(error){

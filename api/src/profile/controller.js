@@ -2,6 +2,7 @@ const httpStatus = require("http-status");
 const { sequelize, Sequelize } = require("../configs/sequelize");
 const { Op } = Sequelize;
 const Profile = require('./model');
+const auth = require('../core/auth')
 
 let methods = {};
 
@@ -18,6 +19,8 @@ methods = {
             return res.status(httpStatus.BAD_REQUEST).end("Description missing from request");
         }
         try{
+            await verifyUserProfile(req.headers['x-access-token'],["Administrator","Moderator"])
+
             let profile = await Profile.create({
                 description: req.body.description
             })
@@ -25,12 +28,18 @@ methods = {
             return res.status(httpStatus.CREATED).send(profile);
         }
         catch(error){
-            console.error(error);
-            return res.status(httpStatus.INTERNAL_SERVER_ERROR).end("Internal server error");
+            if(error.status == httpStatus.UNAUTHORIZED || error.status == httpStatus.FORBIDDEN){
+                return res.status(error.status).end(error.message)
+            }   else{
+                console.log(error);
+                return res.status(httpStatus.INTERNAL_SERVER_ERROR).end("Internal server error");
+            }
         }
     },
     findAll: async (req,res) => {
         try{
+            await verifyUserProfile(req.headers['x-access-token'],["Administrator","Moderator"])
+
             let profiles = await Profile.findAll();
             if(profiles == null){
                 res.set("Info","No profiles were found");
@@ -39,8 +48,12 @@ methods = {
             return res.json(profiles);
         }
         catch(error){
-            console.log(error);
-            return res.status(httpStatus.INTERNAL_SERVER_ERROR).end("Internal server error");
+            if(error.status == httpStatus.UNAUTHORIZED || error.status == httpStatus.FORBIDDEN){
+                return res.status(error.status).end(error.message)
+            }   else{
+                console.log(error);
+                return res.status(httpStatus.INTERNAL_SERVER_ERROR).end("Internal server error");
+            }
         }
     },
     findById: async (req,res) => {
@@ -50,6 +63,8 @@ methods = {
         }
         
         try{
+            await verifyUserProfile(req.headers['x-access-token'],["Administrator","Moderator"])
+
             let profile = await Profile.findByPk(req.params.id)
             if(profile == null){
                 return res.status(httpStatus.NOT_FOUND).end("Profile with requested ID was not found");
@@ -58,8 +73,12 @@ methods = {
             }
         }
         catch(error){
-            console.log(error);
-            return res.status(httpStatus.INTERNAL_SERVER_ERROR).end("Internal server error");
+            if(error.status == httpStatus.UNAUTHORIZED || error.status == httpStatus.FORBIDDEN){
+                return res.status(error.status).end(error.message)
+            }   else{
+                console.log(error);
+                return res.status(httpStatus.INTERNAL_SERVER_ERROR).end("Internal server error");
+            }
         }
     },
     update: async (req,res) => {
@@ -77,6 +96,8 @@ methods = {
         }
 
         try{
+            await verifyUserProfile(req.headers['x-access-token'],["Administrator","Moderator"])
+
             let profile = await Profile.findByPk(req.body.id);
 
             if(profile == null){
@@ -91,8 +112,12 @@ methods = {
             }
         }
         catch(error){
-            console.log(error);
-            return res.status(httpStatus.INTERNAL_SERVER_ERROR).end("Internal server error");
+            if(error.status == httpStatus.UNAUTHORIZED || error.status == httpStatus.FORBIDDEN){
+                return res.status(error.status).end(error.message)
+            }   else{
+                console.log(error);
+                return res.status(httpStatus.INTERNAL_SERVER_ERROR).end("Internal server error");
+            }
         }
     },
     delete: async (req,res) => {
@@ -106,6 +131,8 @@ methods = {
         }
 
         try{
+            await verifyUserProfile(req.headers['x-access-token'],["Administrator","Moderator"])
+
             let deletedProfile = await Profile.destroy({
                 where: {
                     id: req.body.id
@@ -114,12 +141,16 @@ methods = {
             if(deletedProfile == 0){
                 return res.status(httpStatus.NOT_FOUND).end("Profile with the requested ID was not found");
             }   else {
-                return res.status(httpStatus.OK).send("Profile with the requested ID was deleted");
+                return res.status(httpStatus.OK).end("Profile with the requested ID was deleted");
             }
         }
         catch(error){
-            console.log(error);
-            res.status(httpStatus.INTERNAL_SERVER_ERROR).end("Internal server error");
+            if(error.status == httpStatus.UNAUTHORIZED || error.status == httpStatus.FORBIDDEN){
+                return res.status(error.status).end(error.message)
+            }   else{
+                console.log(error);
+                return res.status(httpStatus.INTERNAL_SERVER_ERROR).end("Internal server error");
+            }
         }
     }
 }

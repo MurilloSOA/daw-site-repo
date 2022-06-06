@@ -5,7 +5,8 @@ class Profile extends Model {};
 
 Profile.init({
     description: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: false
     }
 },{
     sequelize,

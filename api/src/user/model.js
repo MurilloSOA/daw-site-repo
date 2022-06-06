@@ -22,6 +22,7 @@ User.init ({
     modelName: 'users'
 });
 
-Profile.hasOne(User);
+Profile.hasMany(User);
+User.belongsTo(Profile);
 
 module.exports = User;
