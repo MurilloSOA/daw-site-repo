@@ -6,20 +6,6 @@ const Profile = require('../profile/model')
 class UserProfile extends Model {};
 
 UserProfile.init({
-    userId: {
-        type: DataTypes.BIGINT,
-        references: {
-            model: User,
-            key: 'id'
-        }
-    },
-    profileId: {
-        type: DataTypes.BIGINT,
-        references: {
-            model: Profile,
-            key: 'id'
-        }
-    }
 },{
     sequelize,
     modelName: 'userProfiles'

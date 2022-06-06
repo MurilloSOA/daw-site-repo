@@ -1,28 +1,28 @@
 const httpStatus = require("http-status");
 const { sequelize, Sequelize } = require("../configs/sequelize");
 const { Op } = Sequelize;
-const Profile = require('./model');
+const Developer = require('./model');
 
 let methods = {};
 
 methods = {
 
     create: async (req,res) => {
-        if('description' in req.body && req.body.description != ""){
-            let profile = await Profile.findOne({where: {description: req.body.description}})
+        if('name' in req.body && req.body.name != ""){
+            let developer = await Developer.findOne({where: {name: req.body.name}})
 
-            if(profile != null){
-                return res.status(httpStatus.CONFLICT).end("Profile with provided description already exists");
+            if(developer != null){
+                return res.status(httpStatus.CONFLICT).end("Developer with provided name already exists");
             }
         }   else{
             return res.status(httpStatus.BAD_REQUEST).end("Description missing from request");
         }
         try{
-            let profile = await Profile.create({
-                description: req.body.description
+            let developer = await Developer.create({
+                name: req.body.name
             })
 
-            return res.status(httpStatus.CREATED).send(profile);
+            return res.status(httpStatus.CREATED).send(developer);
         }
         catch(error){
             console.error(error);
@@ -31,12 +31,12 @@ methods = {
     },
     findAll: async (req,res) => {
         try{
-            let profiles = await Profile.findAll();
-            if(profiles == null){
-                res.set("Info","No profiles were found");
+            let developers = await Developer.findAll();
+            if(developers == null){
+                res.set("Info","No developers were found");
                 return res.status(httpStatus.NO_CONTENT).end();
             }
-            return res.json(profiles);
+            return res.json(developers);
         }
         catch(error){
             console.log(error);
@@ -50,11 +50,11 @@ methods = {
         }
         
         try{
-            let profile = await Profile.findByPk(req.params.id)
-            if(profile == null){
-                return res.status(httpStatus.NOT_FOUND).end("Profile with requested ID was not found");
+            let developer = await Developer.findByPk(req.params.id)
+            if(developer == null){
+                return res.status(httpStatus.NOT_FOUND).end("Developer with requested ID was not found");
             }else{
-                return res.send(profile);
+                return res.send(developer);
             }
         }
         catch(error){
@@ -72,22 +72,22 @@ methods = {
             return res.status(httpStatus.BAD_REQUEST).end("ID missing from request");
         }
 
-        if(!('description' in req.body && req.body.description != "")){
+        if(!('name' in req.body && req.body.name != "")){
             return res.status(httpStatus.BAD_REQUEST).end("No values were provided");
         }
 
         try{
-            let profile = await Profile.findByPk(req.body.id);
+            let developer = await Developer.findByPk(req.body.id);
 
-            if(profile == null){
-                return res.status(httpStatus.NOT_FOUND).end("Profile with requested ID was not found");
+            if(developer == null){
+                return res.status(httpStatus.NOT_FOUND).end("Developer with requested ID was not found");
             }   else{
-                if('description' in req.body){
-                    profile.description = req.body.description;
+                if('name' in req.body){
+                    developer.name = req.body.name;
                 }
 
-                let modifiedProfile = await profile.save();
-                return res.send(modifiedProfile);
+                let modifiedDeveloper = await developer.save();
+                return res.send(modifiedDeveloper);
             }
         }
         catch(error){
@@ -106,15 +106,15 @@ methods = {
         }
 
         try{
-            let deletedProfile = await Profile.destroy({
+            let deletedDeveloper = await Developer.destroy({
                 where: {
                     id: req.body.id
                 }
             })
-            if(deletedProfile == 0){
-                return res.status(httpStatus.NOT_FOUND).end("Profile with the requested ID was not found");
+            if(deletedDeveloper == 0){
+                return res.status(httpStatus.NOT_FOUND).end("Developer with the requested ID was not found");
             }   else {
-                return res.status(httpStatus.OK).send("Profile with the requested ID was deleted");
+                return res.status(httpStatus.OK).send("Developer with the requested ID was deleted");
             }
         }
         catch(error){
