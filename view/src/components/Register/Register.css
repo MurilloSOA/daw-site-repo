@@ -1,32 +1,32 @@
 :root {
-    --loginbox-color: #343d47;
-    --loginbox-legend: #FFF;
-    --loginbox-label: #FFF;
-    --loginbox-input-text: #FFF;
-    --loginbox-input-background: #4d5257;
+    --registerbox-color: #343d47;
+    --registerbox-legend: #FFF;
+    --registerbox-label: #FFF;
+    --registerbox-input-text: #FFF;
+    --registerbox-input-background: #4d5257;
 }
 
-.loginbox__main{
-    background-color: var(--loginbox-color);
+.registerbox__main{
+    background-color: var(--registerbox-color);
     display:flex;
     flex-direction: column;
     width:fit-content;
     margin: 2rem auto;
 }
 
-.loginbox__form{
+.registerbox__form{
     margin: 1rem;
 }
 
-.loginbox__form-legend{
+.registerbox__form-legend{
     text-align: center;
     font-size: 1.1rem;
-    color: var(--loginbox-legend);
+    color: var(--registerbox-legend);
     font-weight: 700;
     margin-bottom: 40px;
 }
 
-.loginbox__form-fieldset-formgroup{
+.registerbox__form-fieldset-formgroup{
     display:flex;
     width: 250px;
     flex-direction: row;
@@ -35,36 +35,40 @@
     align-items: center;
 }
 
-.loginbox__form-fieldset-label{
-    color: var(--loginbox-label);
+.registerbox__form-fieldset-label{
+    color: var(--registerbox-label);
     font-weight: 500;
     font-size: 1rem;
     padding: 0.5rem;
 }
 
-.loginbox__form-fieldset-input{
+.registerbox__form-fieldset-input{
     flex: 1;
     padding: 0.5rem;
     font-size: 0.9rem;
     font-weight: 600;
-    background-color: var(--loginbox-input-background);
-    color: var(--loginbox-input-text);
+    background-color: var(--registerbox-input-background);
+    color: var(--registerbox-input-text);
     border: 2px solid transparent;
     border-bottom: 2px solid var(--bg-color);
     transition: transform 0.3s, border-color 0.2s;
 }
 
-.loginbox__form-fieldset-input:focus{
+.registerbox__form-fieldset-input:focus{
     border: 2px solid #FFF;
     outline: none;
     transform: scale(1.03,1.03)
 }
 
 .input-warning {
-    border: 2px solid red;
+    border: 2px solid #c70909;
 }
 
-.loginbox__form-fieldset-button {
+.input-attention {
+    border: 2px solid #e9b50a;
+}
+
+.registerbox__form-fieldset-button {
     background-color: var(--primary-button-bg-color);
     flex:1;
     padding: 1rem 1rem;
@@ -74,19 +78,19 @@
     transition: all 0.4s;
 }
 
-.loginbox__form-fieldset-button:hover{
+.registerbox__form-fieldset-button:hover{
     cursor: pointer;
     transform:scale(1.05,1.02);
     box-shadow: 5px 5px 50px #3578ff52
 }
 
-.loginbox__register {
+.registerbox__login {
     display:flex;
-    justify-content: flex-end;
-    padding-right: 0.5rem;
+    justify-content: flex-start;
 }
 
-.loginbox__register-link {
-    color: var(--loginbox-label);
+.registerbox__login-link {
+    color: var(--registerbox-label);
     font-size: 0.8rem;
+    padding-left: 0.5rem;
 }

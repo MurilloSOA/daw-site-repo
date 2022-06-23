@@ -1,0 +1,21 @@
+:root {
+    --subtitle-color: #FFF;
+}
+
+.main {
+    display:grid;
+    grid-template-columns: auto auto;
+    padding: 1rem;
+}
+
+.main__recent-title{
+    padding: 0;
+    margin: 0;
+    color: var(--subtitle-color);
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.main__recent-games, .main__recent-reviews {
+    display:flex;
+}
