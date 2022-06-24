@@ -1,9 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+
+import AuthContext from "../../contexts/AuthContext";
 
 import "./Login.css";
 
 function Login() {
+    const context = useContext(AuthContext);
+    const navigate = useNavigate();
+
     function validateLoginForm(username,password){
 
         let valid = true
@@ -35,6 +41,13 @@ function Login() {
         if(!valid) return;
 
         toast.success("Fazer tratamento do login aqui")
+        //Tratamento login e redirecionamento pra Home se sucesso, caso contrário erro.
+        console.log(context.token)
+        context.token = true;
+        console.log(context.token)
+
+        navigate("/", {replace: true});
+
     }
 
     function clearWarning(event){

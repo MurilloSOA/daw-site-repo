@@ -1,9 +1,13 @@
-import React from "react";
+import React, {useContext} from "react";
+
 import Navbar from '../Navbar/Navbar';
+import AuthContext from "../../contexts/AuthContext";
 
 import "./Home.css";
 
 function Home() {
+    const context = useContext(AuthContext);
+    console.log("Home Context: "+context);
 
     return (
         <>
@@ -14,7 +18,8 @@ function Home() {
                 </section>
                 <section className="main__recent-reviews">
                     <p className="main__recent-title">Recent Reviews</p>
-                    <div ></div>
+                    <div>
+                    </div>
                 </section>
             </main>
         </>
