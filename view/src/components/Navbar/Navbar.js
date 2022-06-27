@@ -9,12 +9,14 @@ import { toast } from "react-toastify";
 
 import { server } from "../../constants";
 import AuthContext from "../../contexts/AuthContext";
+import UserIDContext from "../../contexts/UserIDContext";
 
 import "./Navbar.css";
 
 function Navbar() {
     const navigate = useNavigate();
     const context = useContext(AuthContext);
+    const userContext = useContext(UserIDContext);
 
     const [userData, setUserData] = useState({});
 
@@ -32,8 +34,10 @@ function Navbar() {
         })
         .then(res => res.json())
         .then((res) => {
-            if(!res.error) 
+            if(!res.error){
                 setUserData(res);
+                userContext.userId = res.id;
+            }
             else throw res.error;
         })
         .catch((error) => {
@@ -44,7 +48,7 @@ function Navbar() {
     function logOff(){
         localStorage.setItem("userToken", null)
         context.token = null;
-        toast.success("Deu bom o logoff")
+        toast.success("Logoff successful.")
         navigate("/");
     }
 

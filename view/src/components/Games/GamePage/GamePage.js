@@ -1,20 +1,23 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { server } from "../../../constants";
 import Switch from "react-switch";
+
+import { server } from "../../../constants";
 import AuthContext from "../../../contexts/AuthContext";
+import UserIDContext from "../../../contexts/UserIDContext";
 
 import "./GamePage.css";
 
 function GamePage(){
 
     const context = useContext(AuthContext);
+    const userContext = useContext(UserIDContext);
     const navigate = useNavigate();
 
     let { gameId } = useParams();
 
-    const userId = document.querySelector(".header__main-message").id
+    //const userId = document.querySelector(".header__main-message").id;
     const [checked, setChecked] = useState(false);
     const [gameData, setGameData] = useState({});
     const [gameDeveloper, setGameDeveloper] = useState({});
@@ -22,6 +25,7 @@ function GamePage(){
     const [userReviewed, setUserReviewed] = useState(false);
 
     useEffect(() => {
+        console.log(userContext.userId);
         findGameInfo(gameId);
         findGameReviews(gameId);
         // eslint-disable-next-line
@@ -70,7 +74,7 @@ function GamePage(){
             if(!res.error){
                 if(context.token !== "null" && context.token){
                     //eslint-disable-next-line
-                    if(res.find(o => o.userId == userId) !== undefined){
+                    if(res.find(o => o.userId == userContext.userId) !== undefined){
                         setUserReviewed(true);
                     }
                         
@@ -151,9 +155,9 @@ function GamePage(){
 
         //eslint-disable-next-line
         if(comment.value.trim() == 0){
-            createReview("No comment was provided",score.value,checked,userId,gameId)
+            createReview("No comment was provided",score.value,checked,userContext.userId,gameId)
         }   else {
-            createReview(comment.value,score.value,checked,userId,gameId)
+            createReview(comment.value,score.value,checked,userContext.userId,gameId)
 
         }
     }
