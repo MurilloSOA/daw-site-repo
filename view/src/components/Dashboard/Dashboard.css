@@ -1,0 +1,53 @@
+:root {
+    --dashboard-nav-background-color: #152232;
+    --dashboard-nav-text-color: #FFF;
+    --dashboard-content-text-color: #FFF;
+    --dashboard-button-color: #3577ff;
+    --dashboard-button-txt-color: #FFF;
+}
+
+.dashboard__main {
+    background-color: var(--dashboard-content-bg-color);
+    color: var(--dashboard-content-text-color);
+    display:flex;
+    flex-direction: row;
+    height:100vh;
+}
+
+.dashboard__nav {
+    background-color: var(--dashboard-nav-background-color);
+    color: var(--dashboard-nav-text-color);
+    padding: 0;
+    margin: 0;
+    display:flex;
+    align-items: center;
+    width:195px;
+    position: sticky;
+    top: 0;
+    left: 0;
+}
+
+.dashboard__nav-list{
+    padding: 0;
+    margin: 0;
+}
+
+.dashboard__nav-link {
+    display: block;
+    padding: 1.5rem 3rem;
+    font-size: 1.2rem;
+}
+
+.dashboard__nav-list > a {
+    text-decoration: none;
+}
+
+a > .dashboard__nav-link {
+    color: var(--dashboard-nav-text-color);
+    font-weight: 500;
+}
+
+a.active > .dashboard__nav-link {
+    color: var(--dashboard-nav-text-color);
+    font-weight: 700;
+}

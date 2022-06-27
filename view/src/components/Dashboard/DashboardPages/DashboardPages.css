@@ -1,0 +1,61 @@
+:root{
+    --background-dev-create-button: #3577ff;
+    --text-dev-create-button: #FFF;
+    --background-dev-create-input: #4d5257;
+    --text-dev-create-input: #FFF;
+    --border-dev-create-input: #343d47;
+}
+
+.dashboard__dev-main {
+    flex: 1;
+}
+
+.dashboard__dev-create {
+    display:flex;
+    flex-direction: column;
+}
+
+.dashboard__dev-subtitle {
+    text-align: center;
+    padding: 0.8rem;
+    font-size:1.3rem;
+    font-weight: 700;
+}
+
+.dashboard__dev-inputCreate {
+    flex-basis: 75%;
+    padding: 0.5rem;
+    margin-left:3rem;
+    margin-right:1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    background-color: var(--background-dev-create-input);
+    color: var(--text-dev-create-input);
+    border: 2px solid transparent;
+    border-bottom: 2px solid var(--border-dev-create-input);
+    transition: transform 0.3s, border-color 0.2s;
+    
+}
+
+.dashboard__dev-inputCreate:focus{
+    border: 2px solid #FFF;
+    outline: none;
+    transform: scale(1.03,1.03)
+}
+
+.dashboard__dev-buttonCreate {
+    background-color: var(--background-dev-create-button);
+    flex-basis: 10%;
+    padding: 1rem 1rem;
+    margin-left: 2rem;
+    font-size: 0.9rem;
+    color: var(--text-dev-create-button);
+    border: 0;
+    transition: all 0.4s;
+}
+
+.dashboard__dev-buttonCreate:hover{
+    cursor: pointer;
+    transform:scale(1.05,1.02);
+    box-shadow: 5px 5px 50px #3578ff52
+}
