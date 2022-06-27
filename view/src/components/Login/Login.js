@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { server } from "../../constants";
 
 import AuthContext from "../../contexts/AuthContext";
 
@@ -9,6 +10,33 @@ import "./Login.css";
 function Login() {
     const context = useContext(AuthContext);
     const navigate = useNavigate();
+
+    function doLogin(username,password){
+        fetch(server + '/login',{
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                username: username,
+                password: password,
+            })
+        })
+        .then(res => res.json())
+        .then((res) => {
+            if(!res.error){
+                toast.success("Login successful.");
+                localStorage.setItem("userToken",res.token);
+                context.token = res.token;
+                navigate("/",{replace: true});
+            }
+            else throw res.error;
+        })
+        .catch((error) => {
+            toast.error("Error: "+ error);
+        })
+    }
 
     function validateLoginForm(username,password){
 
@@ -40,14 +68,7 @@ function Login() {
         let valid = validateLoginForm(username,password);
         if(!valid) return;
 
-        toast.success("Fazer tratamento do login aqui")
-        //Tratamento login e redirecionamento pra Home se sucesso, caso contrário erro.
-        console.log(context.token)
-        context.token = true;
-        console.log(context.token)
-
-        navigate("/", {replace: true});
-
+        doLogin(username.value,password.value)
     }
 
     function clearWarning(event){

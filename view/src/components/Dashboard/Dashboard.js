@@ -4,7 +4,7 @@ function Dashboard(){
     return (
         <>
             <main>
-                <p color="#FFF">Teste</p>
+                <p color="#FFF">TESTEEEEEEEEEEEEEEEEEEEEEEEEEEEEE</p>
             </main>
         </>
     )

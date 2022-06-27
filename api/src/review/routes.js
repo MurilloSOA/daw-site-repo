@@ -13,4 +13,7 @@ module.exports = (app) => {
     app.delete('/reviews',(req,res) => {
         controller.delete(req,res)
     });
+    app.get('/reviews/findRecent',(req,res) => {
+        controller.findRecent(req,res)
+    });
 }

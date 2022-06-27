@@ -58,8 +58,26 @@
     justify-content: flex-end;
 }
 
-.header__nav-login {
+.header__main-login {
     color: var(--link-color);
     text-decoration: none;
     font-weight: 500;
+    font-size: 1.1rem;
+    padding: 0 1rem;
+}
+
+.header__main-message {
+    font-size: 1.1rem;
+    color: var(--link-color);
+    font-weight: 300;
+    padding: 0 1rem;
+}
+
+.header__main-logout {
+    background: none;
+    color: var(--link-color);
+    font-weight: 500;
+    border:none;
+    padding: 0 1rem;
+    font-size: 1.1rem;
 }

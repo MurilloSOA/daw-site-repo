@@ -12,49 +12,50 @@ let methods = {};
 methods = {
     create: async (req,res) => {
         let pass;
+        console.log(req.body);
         if('username' in req.body && req.body.username != ""){
             let user = await User.findOne({where: {username: req.body.username}})
 
             if(user != null){
-                return res.status(httpStatus.CONFLICT).end("Username already exists");
+                return res.status(httpStatus.CONFLICT).json({error: "Username already exists"});
             }
 
         }else{
-            return res.status(httpStatus.BAD_REQUEST).end("Username missing from request");
+            return res.status(httpStatus.BAD_REQUEST).json({error: "Username missing from request"});
         }
 
         if('email' in req.body && req.body.email != ""){
             let regexp = new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/);
 
             if(!regexp.test(req.body.email)){
-                return res.status(httpStatus.BAD_REQUEST).end("Invalid email.");
+                return res.status(httpStatus.BAD_REQUEST).json({error: "Invalid email."});
             } 
         }else{
-            return res.status(httpStatus.BAD_REQUEST).end("Email missing from request");
+            return res.status(httpStatus.BAD_REQUEST).json({error: "Email missing from request"});
         }
         
         if('password' in req.body && req.body.password != ""){
             if(req.body.password.length < 8){
-                return res.status(httpStatus.BAD_REQUEST).end("Password is too short");
+                return res.status(httpStatus.BAD_REQUEST).json({error: "Password is too short"});
             }
 
             pass = await bcrypt.hash(req.body.password, 10);
 
         }else{
-            return res.status(httpStatus.BAD_REQUEST).end("Password missing from request");
+            return res.status(httpStatus.BAD_REQUEST).json({error: "Password missing from request"});
         }
 
         if('profileId' in req.body && req.body.profileId != ""){
             let regexp = new RegExp(/^\d+$/);
             if(!regexp.test(req.body.profileId)){
-                return res.status(httpStatus.BAD_REQUEST).end("Profile ID can't contain non-numeric characters");
+                return res.status(httpStatus.BAD_REQUEST).json({error: "Profile ID can't contain non-numeric characters"});
             }
             let profile = await Profile.findByPk(req.body.profileId)
             if(profile == null){
-                return res.status(httpStatus.NOT_FOUND).end("Profile with requested ID was not found")
+                return res.status(httpStatus.NOT_FOUND).json({error: "Profile with requested ID was not found"})
             }
         }else{
-            return res.status(httpStatus.BAD_REQUEST).end("Profile ID missing from request");
+            return res.status(httpStatus.BAD_REQUEST).json({error: "Profile ID missing from request"});
         }
 
         try{
@@ -72,7 +73,7 @@ methods = {
                 return res.status(error.status).end(error.message)
             }   else{
                 console.log(error);
-                return res.status(httpStatus.INTERNAL_SERVER_ERROR).end("Internal server error");
+                return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({error: "Internal server error"});
             }
         }
     },
@@ -93,20 +94,20 @@ methods = {
                 return res.status(error.status).end(error.message)
             }   else{
                 console.log(error);
-                return res.status(httpStatus.INTERNAL_SERVER_ERROR).end("Internal server error");
+                return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({error: "Internal server error"});
             }
         }
     },
     findById: async (req,res) => {
         let regexp = new RegExp(/^\d+$/);
         if(!regexp.test(req.params.id)){
-            return res.status(httpStatus.BAD_REQUEST).end("ID can't contain non-numeric characters");
+            return res.status(httpStatus.BAD_REQUEST).json({error: "ID can't contain non-numeric characters"});
         }
 
         try{
             let user = await User.findOne({where: {id: req.params.id}})
             if(user == null){
-                return res.status(httpStatus.NOT_FOUND).end("User with requested ID was not found");
+                return res.status(httpStatus.NOT_FOUND).json({error: "User with requested ID was not found"});
             }   else {
                 return res.send(user);
             }
@@ -116,7 +117,7 @@ methods = {
                 return res.status(error.status).end(error.message)
             }   else{
                 console.log(error);
-                return res.status(httpStatus.INTERNAL_SERVER_ERROR).end("Internal server error");
+                return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({error: "Internal server error"});
             }
         }
     },
@@ -124,16 +125,16 @@ methods = {
         if('id' in req.body && req.body.id != ""){
             let regexp = new RegExp(/^\d+$/);
             if(!regexp.test(req.body.id)){
-                return res.status(httpStatus.BAD_REQUEST).end("ID can't contain non-numeric characters")
+                return res.status(httpStatus.BAD_REQUEST).json({error: "ID can't contain non-numeric characters"})
             }
         }   else {
-            return res.status(httpStatus.BAD_REQUEST).end("ID missing from request");
+            return res.status(httpStatus.BAD_REQUEST).json({error: "ID missing from request"});
         }
 
         if(('password' in req.body && req.body.password != "") || ('email' in req.body && req.body.email != "") || ('profileId' in req.body && req.body.profileId != "")){
             if('password' in req.body && req.body.password != ""){
                 if(req.body.password.length < 8){
-                    return res.status(httpStatus.BAD_REQUEST).end("Password is too short");
+                    return res.status(httpStatus.BAD_REQUEST).json({error: "Password is too short"});
                 }
             }
             
@@ -141,24 +142,24 @@ methods = {
                 let regexp = new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/);
 
                 if(!regexp.test(req.body.email)){
-                    return res.status(httpStatus.BAD_REQUEST).end("Invalid email.");
+                    return res.status(httpStatus.BAD_REQUEST).json({error: "Invalid email."});
                 } 
             }
 
             if('profileId' in req.body && req.body.profileId != ""){
                 let regexp = new RegExp(/^\d+$/);
                 if(!regexp.test(req.body.profileId)){
-                    return res.status(httpStatus.BAD_REQUEST).end("Profile ID can't contain non-numeric characters")
+                    return res.status(httpStatus.BAD_REQUEST).json({error: "Profile ID can't contain non-numeric characters"})
                 }
             }
         }else{
-            return res.status(httpStatus.BAD_REQUEST).end("No values were provided for update")
+            return res.status(httpStatus.BAD_REQUEST).json({error: "No values were provided for update"})
         }
 
         try{
             let user = await User.findByPk(req.body.id);
             if(user == null){
-                return res.status(httpStatus.NOT_FOUND).end("User with the requested ID was not found");
+                return res.status(httpStatus.NOT_FOUND).json({error: "User with the requested ID was not found"});
             }   else {
                 if('password' in req.body && req.body.password != ""){
                     user.password = req.body.password;
@@ -179,7 +180,7 @@ methods = {
                 return res.status(error.status).end(error.message)
             }   else{
                 console.log(error);
-                return res.status(httpStatus.INTERNAL_SERVER_ERROR).end("Internal server error");
+                return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({error: "Internal server error"});
             }
         }
     },
@@ -189,10 +190,10 @@ methods = {
         if('id' in req.body && req.body.id != ""){
             let regexp = new RegExp(/^\d+$/);
             if(!regexp.test(req.body.id)){
-                res.status(httpStatus.BAD_REQUEST).end("ID can't contain non-numeric characters")
+                res.status(httpStatus.BAD_REQUEST).json({error: "ID can't contain non-numeric characters"})
             }
         }   else {
-            return res.status(httpStatus.BAD_REQUEST).end("ID missing from request");
+            return res.status(httpStatus.BAD_REQUEST).json({error: "ID missing from request"});
         }
         try{
             await auth.verifyUserDelete(req.headers['x-access-token'],req.body.id)
@@ -203,9 +204,9 @@ methods = {
                 }
             })
             if(deletedUser == 0){
-                return res.status(httpStatus.NOT_FOUND).end("User with the requested ID was not found");
+                return res.status(httpStatus.NOT_FOUND).json({error: "User with the requested ID was not found"});
             }   else {
-                return res.status(httpStatus.OK).end("User with the requested ID was deleted");
+                return res.status(httpStatus.OK).json({error: "User with the requested ID was deleted"});
             }
         }
         catch(error){
@@ -213,7 +214,7 @@ methods = {
                 return res.status(error.status).end(error.message)
             }   else{
                 console.log(error);
-                return res.status(httpStatus.INTERNAL_SERVER_ERROR).end("Internal server error");
+                return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({error: "Internal server error"});
             }
         }
     },
@@ -226,15 +227,33 @@ methods = {
                     const token = await tkn.createToken({userId: user.id})
                     return res.json({ auth: true, token: token})
                 }   else{
-                    return res.status(httpStatus.UNAUTHORIZED).send("User/password is invalid");
+                    return res.status(httpStatus.UNAUTHORIZED).json({error: "User/password is invalid"});
                 }
             })
         }   else{
-            return res.status(httpStatus.UNAUTHORIZED).send("User/password is invalid");
+            return res.status(httpStatus.UNAUTHORIZED).json({error: "User/password is invalid"});
         }
     },
     logout: async (req,res) => {
         res.json({auth: false, token: false})
+    },
+    isUserAdmin: async(req,res) => {
+        try {
+            let valid = await auth.verifyUserProfile(req.body.token,["Administrator","Moderator"]);
+            res.send({valid: true});
+        } catch (error) {
+            res.send({valid: false});
+        }
+    },
+    getUserData: async(req,res) => {
+        try{
+            let decoded = tkn.verifyToken(req.params.token);
+            let user = await User.findByPk(decoded.userId,{include: [Profile]});
+
+            return res.status(httpStatus.OK).send(user);
+        } catch(error){
+            return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({error: "Internal server error"})
+        }
     }
 }
 
@@ -258,6 +277,6 @@ exports.findByUserIdProf = async (userId) => {
     } catch (error) {
         console.log("Error on searching user: "+ error)
     }
-},
+}
 
 module.exports = methods;

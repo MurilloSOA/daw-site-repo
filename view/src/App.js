@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { ToastContainer } from 'react-toastify';
 import './App.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -7,8 +7,7 @@ import AuthContext from './contexts/AuthContext'
 
 function App() {
   // eslint-disable-next-line no-unused-vars
-  const [token, setToken] = useState(JSON.parse(localStorage.getItem("userToken")));
-
+  
   return (
     <AuthContext.Provider value={{token: localStorage.getItem("userToken")}}>
       <Router/>

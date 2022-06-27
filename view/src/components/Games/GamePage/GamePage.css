@@ -1,0 +1,182 @@
+:root {
+    --gamepage-game-title: #FFF;
+    --background-gamepage-game-info: #3e4855;
+    --gamepage-game-info: #FFF;
+    --border-gamepage-review-not: #793e3e;
+    --border-gamepage-review-rec: #43793e;
+    --background-gamepage-review: #434f5f;
+    --gamepage-review-color: #FFF;
+    --background-input-review: #4d5257;
+    --input-text-color: #FFF;
+    --input-border-color: #1f2b3a;
+}
+.gamepage__main{
+    display:flex;
+    flex-direction: column;
+    margin: 1rem;
+}
+
+.gamepage__main-gameInfo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    grid-gap: 1rem;
+}
+
+.gamepage__main-gameInfo-title {
+    color: var(--gamepage-game-title);
+    text-align: center;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.gamepage__main-gameInfo-description {
+    grid-column: 1 / span 2;
+    grid-row: 1;
+    background-color: var(--background-gamepage-game-info);
+    border-radius: 1rem;
+    padding: 0.5rem;
+    color: var(--gamepage-game-info);
+    font-size: 1.2rem;
+}
+
+.gamepage__main-gameInfo-developer {
+    grid-column: 2;
+    grid-row: 2;
+    background-color: var(--background-gamepage-game-info);
+    border-radius: 1rem;
+    padding: 0.5rem;
+    color: var(--gamepage-game-info);
+    font-size: 1rem;
+    text-align: center;
+}
+
+.gamepage__main-gameInfo-launchDate {
+    grid-column: 1;
+    grid-row: 2;
+    background-color: var(--background-gamepage-game-info);
+    border-radius: 1rem;
+    padding: 0.5rem;
+    color: var(--gamepage-game-info);
+    text-align: center;
+}
+
+.gamepage__main-reviews-title {
+    color: var(--gamepage-game-title);
+    text-align: center;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 1rem 0;
+}
+
+.gamepage__main-review-item{
+    display:grid;
+    grid-template-columns: 5% 15% 1fr;
+    grid-template-rows: auto auto;
+    grid-gap: 0.5rem;
+    border-radius: 1rem;
+    background-color: var(--background-gamepage-review);
+    margin: 0.5rem 0;
+}
+
+.background__rec {
+    background-color:var(--border-gamepage-review-rec);
+}
+
+.background__not {
+    background-color:var(--border-gamepage-review-not);
+}
+
+.gamepage__main-review-rec {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    border-top-left-radius: inherit;
+    border-bottom-left-radius: inherit;
+}
+
+.gamepage__main-review-username{
+    grid-column: 2;
+    grid-row: 1;
+    text-align: center;
+    color: var(--gamepage-review-color);
+    margin-top: 0.5rem;
+    font-weight: 600;
+}
+
+.gamepage__main-review-score{
+    grid-column: 2;
+    grid-row:2;
+    text-align: center;
+    color: var(--gamepage-review-color);
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.gamepage__main-review-comment{
+    grid-column: 3;
+    grid-row: 1 / span 2;
+    align-self: center;
+    color: var(--gamepage-review-color);
+}
+
+.gamepage__main-review-box {
+    display:grid;
+    grid-template-columns: 10% 1fr 10%;
+    grid-template-rows: auto auto;
+    grid-gap: 0.5rem;
+    margin: 1rem 0;
+    padding: 0.8rem;
+    border-radius: 1rem;
+    background-color: var(--background-gamepage-game-info);
+}
+
+.gamepage__main-review-box-score {
+    grid-column: 1;
+    grid-row: 1;
+    padding: 0.5rem;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    background-color: var(--background-input-review);
+    border: none;
+    border-bottom: 2px solid var(--input-border-color);
+    color: var(--input-text-color)
+}
+
+.gamepage__main-review-box-switch {
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: center;
+}
+
+.gamepage__main-review-box-comment {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    resize: none;
+    padding: 0.5rem;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    background-color: var(--background-input-review);
+    border: none;
+    border-bottom: 2px solid var(--input-border-color);
+    color: var(--input-text-color);
+    height: 6rem;
+}
+
+.gamepage__main-review-box-button {
+    grid-column: 3;
+    grid-row: 1 / span 2;
+    background-color: var(--primary-button-bg-color);
+    padding: 1rem 1rem;
+    font-size: 0.9rem;
+    color: var(--primary-button-txt-color);
+    border: 0;
+    border-radius: 0.5rem;
+    transition: all 0.4s;
+}
+
+.gamepage__main-review-box-button:hover{
+    cursor: pointer;
+    transform:scale(1.05,1.02);
+    box-shadow: 5px 5px 50px #3578ff52
+}

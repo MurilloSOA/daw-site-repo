@@ -1,10 +1,12 @@
 :root {
     --subtitle-color: #FFF;
+    --item-text-color: #c0c0c0;
+    --item-border-color: #3e4855;
 }
 
 .main {
     display:grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: 1fr 1fr;
     padding: 1rem;
 }
 
@@ -18,4 +20,75 @@
 
 .main__recent-games, .main__recent-reviews {
     display:flex;
+    flex-direction: column;
+}
+
+.main__recent-games-table{
+    margin: 0.5rem 0.5rem;
+}
+
+.main__recent-games-item {
+    display:flex;
+    flex-direction: row;
+    border: 1px solid var(--item-border-color);
+    margin: 0.2rem 0;
+    cursor:pointer;
+}
+
+.main__recent-games-item-id {
+    padding: 0.5rem 1rem;
+    margin: 0;
+    color: var(--item-text-color);
+    border: 1px solid var(--item-border-color);
+    text-align: center;
+    flex-basis: 8%;
+}
+
+.main__recent-games-item-title {
+    padding: 0.5rem 1rem;
+    margin: 0;
+    color: var(--item-text-color);
+    border: 1px solid var(--item-border-color);
+    flex:1;
+    text-align: center;
+}
+
+.main__recent-reviews-table{
+    margin: 0.5rem 0.5rem;
+}
+
+.main__recent-reviews-item {
+    display:flex;
+    flex-direction: row;
+    border: 1px solid var(--item-border-color);
+    margin: 0.2rem 0;
+    cursor:pointer;
+}
+
+.main__recent-reviews-item-user {
+    padding: 0.5rem 1rem;
+    margin: 0;
+    color: var(--item-text-color);
+    border: 1px solid var(--item-border-color);
+    text-align: center;
+    flex-basis: 46.5%;
+}
+
+.main__recent-reviews-item-game {
+    padding: 0.5rem 1rem;
+    margin: 0;
+    color: var(--item-text-color);
+    border: 1px solid var(--item-border-color);
+    text-align: center;
+    flex-basis: 46.5%;
+
+}
+
+.main__recent-reviews-item-score {
+    padding: 0.5rem 1rem;
+    margin: 0;
+    color: var(--item-text-color);
+    border: 1px solid var(--item-border-color);
+    text-align: center;
+    flex-basis: 7%;
 }

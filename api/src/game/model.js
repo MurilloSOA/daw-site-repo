@@ -1,4 +1,5 @@
 const { sequelize, Sequelize } = require("../configs/sequelize");
+const Review = require("../review/model");
 const { DataTypes, Model } = Sequelize;
 
 class Game extends Model {};
@@ -20,5 +21,7 @@ Game.init({
     sequelize,
     modelName: "games"
 });
+
+Review.belongsTo(Game, {foreignKey: "gameId"});
 
 module.exports = Game;

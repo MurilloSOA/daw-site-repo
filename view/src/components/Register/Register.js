@@ -1,13 +1,22 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+
+import '../../constants';
+import { server } from "../../constants";
 
 import "./Register.css";
 
 function Register() {
+
+    const navigate = useNavigate();
+
     function validateRegisterForm(username,email,password,repassword){
 
         let valid = true
-        // eslint-disable-next-line no-useless-escape
+
+        // eslint-disable-next-line
+        let emailRegExp = new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/);
 
         // eslint-disable-next-line eqeqeq
         if(username.value.trim() == 0){
@@ -21,17 +30,28 @@ function Register() {
             toast.error("Email is blank");
             email.classList.add("input-warning");
             valid = false;
+        }   else if(!email.value.match(emailRegExp)){
+            toast.error("Email is invalid");
+            email.classList.add("input-warning");
+            valid = false;
         }
 
         if(password.value === ""){
             toast.error("Password is blank");
             password.classList.add("input-warning");
             valid = false;
-        }   else if(repassword.value === ""){
+        }
+        else if(password.value.length < 8){
+            toast.error("Password must be 8 characters or longer");
+            password.classList.add("input-warning");
+            valid = false;
+        }
+        else if(repassword.value === ""){
             toast.warning("Please retype your password")
             repassword.classList.add("input-attention");
             valid = false;
-        }   else {
+        }
+        else {
             // eslint-disable-next-line eqeqeq
             if(password.value != repassword.value){
                 toast.warning("Passwords do not match")
@@ -40,8 +60,35 @@ function Register() {
             }
         }
 
-
         return valid;
+    }
+
+    function sendRegister(username, email, password){
+        
+        fetch(server + '/users',{
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                username: username,
+                email: email,
+                password: password,
+                profileId: 2
+            })
+        })
+        .then(res => res.json())
+        .then((res) => {
+            if(!res.error){
+                toast.success("User "+res.username+" successfully created.");
+                navigate("/",{replace: true});
+            }
+            else throw res.error;
+        })
+        .catch((error) => {
+            toast.error("Error: "+ error);
+        })
     }
 
 
@@ -56,7 +103,7 @@ function Register() {
         let valid = validateRegisterForm(username,email,password,repassword);
         if(!valid) return;
 
-        toast.success("Fazer tratamento de registro aqui.");
+        sendRegister(username.value,email.value,password.value);
     }
 
     function clearWarning(event){

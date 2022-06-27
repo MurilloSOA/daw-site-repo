@@ -19,4 +19,10 @@ module.exports = (app) => {
     app.post('/login', (req,res) => {
         controller.login(req,res)
     });
+    app.post('/users/checkAdmin', (req,res) => {
+        controller.isUserAdmin(req,res)
+    });
+    app.get('/user/getUserData/:token', (req,res) => {
+        controller.getUserData(req,res)
+    })
 }

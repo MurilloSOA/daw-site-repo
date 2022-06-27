@@ -13,13 +13,13 @@ methods = {
             let profile = await Profile.findOne({where: {description: req.body.description}})
 
             if(profile != null){
-                return res.status(httpStatus.CONFLICT).end("Profile with provided description already exists");
+                return res.status(httpStatus.CONFLICT).json({error: "Profile with provided description already exists"});
             }
         }   else{
-            return res.status(httpStatus.BAD_REQUEST).end("Description missing from request");
+            return res.status(httpStatus.BAD_REQUEST).json({error: "Description missing from request"});
         }
         try{
-            await verifyUserProfile(req.headers['x-access-token'],["Administrator","Moderator"])
+            await auth.verifyUserProfile(req.headers['x-access-token'],["Administrator","Moderator"])
 
             let profile = await Profile.create({
                 description: req.body.description
@@ -32,13 +32,13 @@ methods = {
                 return res.status(error.status).end(error.message)
             }   else{
                 console.log(error);
-                return res.status(httpStatus.INTERNAL_SERVER_ERROR).end("Internal server error");
+                return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({error: "Internal server error"});
             }
         }
     },
     findAll: async (req,res) => {
         try{
-            await verifyUserProfile(req.headers['x-access-token'],["Administrator","Moderator"])
+            await auth.verifyUserProfile(req.headers['x-access-token'],["Administrator","Moderator"])
 
             let profiles = await Profile.findAll();
             if(profiles == null){
@@ -52,22 +52,22 @@ methods = {
                 return res.status(error.status).end(error.message)
             }   else{
                 console.log(error);
-                return res.status(httpStatus.INTERNAL_SERVER_ERROR).end("Internal server error");
+                return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({error: "Internal server error"});
             }
         }
     },
     findById: async (req,res) => {
         let regexp = new RegExp(/^\d+$/);
         if(!regexp.test(req.params.id)){
-            return res.status(httpStatus.BAD_REQUEST).end("ID can't contain non-numeric characters");
+            return res.status(httpStatus.BAD_REQUEST).json({error: "ID can't contain non-numeric characters"});
         }
         
         try{
-            await verifyUserProfile(req.headers['x-access-token'],["Administrator","Moderator"])
+            await auth.verifyUserProfile(req.headers['x-access-token'],["Administrator","Moderator"])
 
             let profile = await Profile.findByPk(req.params.id)
             if(profile == null){
-                return res.status(httpStatus.NOT_FOUND).end("Profile with requested ID was not found");
+                return res.status(httpStatus.NOT_FOUND).json({error: "Profile with requested ID was not found"});
             }else{
                 return res.send(profile);
             }
@@ -77,7 +77,7 @@ methods = {
                 return res.status(error.status).end(error.message)
             }   else{
                 console.log(error);
-                return res.status(httpStatus.INTERNAL_SERVER_ERROR).end("Internal server error");
+                return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({error: "Internal server error"});
             }
         }
     },
@@ -85,23 +85,23 @@ methods = {
         if('id' in req.body && req.body.id != ""){
             let regexp = new RegExp(/^\d+$/);
             if(!regexp.test(req.body.id)){
-                return res.status(httpStatus.BAD_REQUEST).end("ID can't contain non-numeric characters");
+                return res.status(httpStatus.BAD_REQUEST).json({error: "ID can't contain non-numeric characters"});
             }
         }   else{
-            return res.status(httpStatus.BAD_REQUEST).end("ID missing from request");
+            return res.status(httpStatus.BAD_REQUEST).json({error: "ID missing from request"});
         }
 
         if(!('description' in req.body && req.body.description != "")){
-            return res.status(httpStatus.BAD_REQUEST).end("No values were provided");
+            return res.status(httpStatus.BAD_REQUEST).json({error: "No values were provided"});
         }
 
         try{
-            await verifyUserProfile(req.headers['x-access-token'],["Administrator","Moderator"])
+            await auth.verifyUserProfile(req.headers['x-access-token'],["Administrator","Moderator"])
 
             let profile = await Profile.findByPk(req.body.id);
 
             if(profile == null){
-                return res.status(httpStatus.NOT_FOUND).end("Profile with requested ID was not found");
+                return res.status(httpStatus.NOT_FOUND).json({error: "Profile with requested ID was not found"});
             }   else{
                 if('description' in req.body){
                     profile.description = req.body.description;
@@ -116,7 +116,7 @@ methods = {
                 return res.status(error.status).end(error.message)
             }   else{
                 console.log(error);
-                return res.status(httpStatus.INTERNAL_SERVER_ERROR).end("Internal server error");
+                return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({error: "Internal server error"});
             }
         }
     },
@@ -124,14 +124,14 @@ methods = {
         if('id' in req.body && req.body.id != ""){
             let regexp = new RegExp(/^\d+$/);
             if(!regexp.test(req.body.id)){
-                return res.status(httpStatus.BAD_REQUEST).end("ID can't contain non-numeric characters")
+                return res.status(httpStatus.BAD_REQUEST).json({error: "ID can't contain non-numeric characters"})
             }
         }   else {
-            return res.status(httpStatus.BAD_REQUEST).end("ID missing from request");
+            return res.status(httpStatus.BAD_REQUEST).json({error: "ID missing from request"});
         }
 
         try{
-            await verifyUserProfile(req.headers['x-access-token'],["Administrator","Moderator"])
+            await auth.verifyUserProfile(req.headers['x-access-token'],["Administrator","Moderator"])
 
             let deletedProfile = await Profile.destroy({
                 where: {
@@ -139,9 +139,9 @@ methods = {
                 }
             })
             if(deletedProfile == 0){
-                return res.status(httpStatus.NOT_FOUND).end("Profile with the requested ID was not found");
+                return res.status(httpStatus.NOT_FOUND).json({error: "Profile with the requested ID was not found"});
             }   else {
-                return res.status(httpStatus.OK).end("Profile with the requested ID was deleted");
+                return res.status(httpStatus.OK).json({error: "Profile with the requested ID was deleted"});
             }
         }
         catch(error){
@@ -149,7 +149,7 @@ methods = {
                 return res.status(error.status).end(error.message)
             }   else{
                 console.log(error);
-                return res.status(httpStatus.INTERNAL_SERVER_ERROR).end("Internal server error");
+                return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({error: "Internal server error"});
             }
         }
     }

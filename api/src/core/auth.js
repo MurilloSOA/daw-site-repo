@@ -33,9 +33,12 @@ exports.verifyUserProfile = async (token, profile) => {
         const user = await User.findByUserIdProf(decoded.userId)
 
         let correct = profile.includes(user.profile.description)? true : false
-
+        
         if(correct){
-            Promise.resolve({userId: user.id})
+            Promise.resolve({
+                status: httpStatus.OK,
+                userId: user.id
+            })
         }   else{
             return Promise.reject({
                 status: httpStatus.FORBIDDEN,

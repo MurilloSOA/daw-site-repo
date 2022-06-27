@@ -13,10 +13,10 @@ methods = {
             let developer = await Developer.findOne({where: {name: req.body.name}})
 
             if(developer != null){
-                return res.status(httpStatus.CONFLICT).end("Developer with provided name already exists");
+                return res.status(httpStatus.CONFLICT).json({error: "Developer with provided name already exists"});
             }
         }   else{
-            return res.status(httpStatus.BAD_REQUEST).end("Description missing from request");
+            return res.status(httpStatus.BAD_REQUEST).json({error: "Description missing from request"});
         }
         try{
             await auth.verifyUserProfile(req.headers['x-access-token'],["Administrator","Moderator"])
@@ -29,7 +29,7 @@ methods = {
         }
         catch(error){
             console.error(error);
-            return res.status(httpStatus.INTERNAL_SERVER_ERROR).end("Internal server error");
+            return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({error: "Internal server error"});
         }
     },
     findAll: async (req,res) => {
@@ -46,20 +46,20 @@ methods = {
                 return res.status(error.status).end(error.message)
             }   else{
                 console.log(error);
-                return res.status(httpStatus.INTERNAL_SERVER_ERROR).end("Internal server error");
+                return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({error: "Internal server error"});
             }
         }
     },
     findById: async (req,res) => {
         let regexp = new RegExp(/^\d+$/);
         if(!regexp.test(req.params.id)){
-            return res.status(httpStatus.BAD_REQUEST).end("ID can't contain non-numeric characters");
+            return res.status(httpStatus.BAD_REQUEST).json({error: "ID can't contain non-numeric characters"});
         }
         
         try{
             let developer = await Developer.findByPk(req.params.id)
             if(developer == null){
-                return res.status(httpStatus.NOT_FOUND).end("Developer with requested ID was not found");
+                return res.status(httpStatus.NOT_FOUND).json({error: "Developer with requested ID was not found"});
             }else{
                 return res.send(developer);
             }
@@ -69,7 +69,7 @@ methods = {
                 return res.status(error.status).end(error.message)
             }   else{
                 console.log(error);
-                return res.status(httpStatus.INTERNAL_SERVER_ERROR).end("Internal server error");
+                return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({error: "Internal server error"});
             }
         }
     },
@@ -77,14 +77,14 @@ methods = {
         if('id' in req.body && req.body.id != ""){
             let regexp = new RegExp(/^\d+$/);
             if(!regexp.test(req.body.id)){
-                return res.status(httpStatus.BAD_REQUEST).end("ID can't contain non-numeric characters");
+                return res.status(httpStatus.BAD_REQUEST).json({error: "ID can't contain non-numeric characters"});
             }
         }   else{
-            return res.status(httpStatus.BAD_REQUEST).end("ID missing from request");
+            return res.status(httpStatus.BAD_REQUEST).json({error: "ID missing from request"});
         }
 
         if(!('name' in req.body && req.body.name != "")){
-            return res.status(httpStatus.BAD_REQUEST).end("No values were provided");
+            return res.status(httpStatus.BAD_REQUEST).json({error: "No values were provided"});
         }
 
         try{
@@ -93,7 +93,7 @@ methods = {
             let developer = await Developer.findByPk(req.body.id);
 
             if(developer == null){
-                return res.status(httpStatus.NOT_FOUND).end("Developer with requested ID was not found");
+                return res.status(httpStatus.NOT_FOUND).json({error: "Developer with requested ID was not found"});
             }   else{
                 if('name' in req.body){
                     developer.name = req.body.name;
@@ -108,7 +108,7 @@ methods = {
                 return res.status(error.status).end(error.message)
             }   else{
                 console.log(error);
-                return res.status(httpStatus.INTERNAL_SERVER_ERROR).end("Internal server error");
+                return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({error: "Internal server error"});
             }
         }
     },
@@ -116,10 +116,10 @@ methods = {
         if('id' in req.body && req.body.id != ""){
             let regexp = new RegExp(/^\d+$/);
             if(!regexp.test(req.body.id)){
-                return res.status(httpStatus.BAD_REQUEST).end("ID can't contain non-numeric characters")
+                return res.status(httpStatus.BAD_REQUEST).json({error: "ID can't contain non-numeric characters"})
             }
         }   else {
-            return res.status(httpStatus.BAD_REQUEST).end("ID missing from request");
+            return res.status(httpStatus.BAD_REQUEST).json({error: "ID missing from request"});
         }
 
         try{
@@ -131,14 +131,14 @@ methods = {
                 }
             })
             if(deletedDeveloper == 0){
-                return res.status(httpStatus.NOT_FOUND).end("Developer with the requested ID was not found");
+                return res.status(httpStatus.NOT_FOUND).json({error: "Developer with the requested ID was not found"});
             }   else {
-                return res.status(httpStatus.OK).end("Developer with the requested ID was deleted");
+                return res.status(httpStatus.OK).json({error: "Developer with the requested ID was deleted"});
             }
         }
         catch(error){
             console.log(error);
-            res.status(httpStatus.INTERNAL_SERVER_ERROR).end("Internal server error");
+            res.status(httpStatus.INTERNAL_SERVER_ERROR).json({error: "Internal server error"});
         }
     }
 }

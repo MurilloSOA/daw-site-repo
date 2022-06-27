@@ -16,4 +16,7 @@ module.exports = (app) => {
     app.delete('/games',(req,res) => {
         controller.delete(req,res)
     });
+    app.get('/game/findRecent', (req,res) => {
+        controller.findRecent(req,res)
+    })
 }

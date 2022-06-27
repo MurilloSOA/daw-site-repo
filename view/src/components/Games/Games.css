@@ -1,0 +1,56 @@
+.games__main{
+    display:flex;
+    padding: 1rem;
+    flex-direction: row;
+}
+
+.games__main-gamelist {
+    display:flex;
+    flex-direction: column;
+    flex:1;
+}
+
+.games__main-gamelist-item {
+    display:flex;
+    flex-direction: row;
+    border: 1px solid var(--item-border-color);
+    margin: 0.2rem 0;
+    cursor:pointer;
+}
+
+.games__main-gamelist-item-id {
+    padding: 0.5rem 1rem;
+    margin: 0;
+    color: var(--item-text-color);
+    border: 1px solid var(--item-border-color);
+    text-align: center;
+    flex-basis: 5%;
+}
+
+.games__main-gamelist-item-title {
+    padding: 0.5rem 1rem;
+    margin: 0;
+    color: var(--item-text-color);
+    border: 1px solid var(--item-border-color);
+    flex:1;
+    text-align: center;
+    flex-basis:60%;
+}
+
+.games__main-gamelist-item-developer {
+    padding: 0.5rem 1rem;
+    margin: 0;
+    color: var(--item-text-color);
+    border: 1px solid var(--item-border-color);
+    text-align: center;
+    flex-basis: 15%;
+}
+
+.games__main-gamelist-item-launchdate {
+    padding: 0.5rem 1rem;
+    margin: 0;
+    color: var(--item-text-color);
+    border: 1px solid var(--item-border-color);
+    text-align: center;
+    flex-basis: 10%;
+}
